@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
-import java.time.Instant;
 import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.*;
@@ -19,15 +18,13 @@ class Musician {
      * Record for the message JSON object
      * @param uuid
      * @param sound
-     * @param lastActivity
      */
-    public record Message(UUID uuid, String sound, long lastActivity){}
+    public record Message(UUID uuid, String sound){}
 
     public static void main(String[] args) {
         while (true){
             try (DatagramSocket socket = new DatagramSocket()) {
                 UUID uuid = UUID.randomUUID();
-                long timestamp = Instant.now().toEpochMilli();
 
                 String sound = null;
                 if (args.length > 0) {
@@ -43,7 +40,7 @@ class Musician {
 
                 try {
                     // Create Message object
-                   Message message = new Message(uuid, sound, timestamp);
+                   Message message = new Message(uuid, sound);
 
                     // Convert message object to JSON object
                     String json = new Gson().toJson(message);
